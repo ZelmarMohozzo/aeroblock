@@ -647,11 +647,11 @@ document.getElementById('sizes').innerHTML=SIZES.map(z=>`
   </article>`).join('');
 
 const MODES=[
-  {t:'Pared',w:1,wl:'Viento suave',d:'Se coloca como una pared. Detiene el viento suave y da más privacidad.',shape:[[30,40],[150,40]]},
+  {t:'Pared 2 m',w:1,wl:'Viento suave',d:'Se coloca como una pared. Detiene el viento suave y da más privacidad.',shape:[[30,40],[90,40],[150,40]]},
   {t:'Forma L',w:3,wl:'Viento fuerte',d:'Para viento fuerte y más privacidad. El palo del medio va en punta hacia el viento.',shape:[[40,62],[90,30],[140,62]]},
   {t:'Cuña',w:2,wl:'Viento moderado',d:'Tres paños: el del medio de frente al viento y los laterales abiertos.',shape:[[38,66],[62,36],[118,36],[142,66]]},
-  {t:'Pared 4 m',w:1,wl:'Viento suave',d:'La pared más larga: cubre a toda la familia y da más privacidad.',shape:[[14,40],[166,40]]},
-  {t:'Forma L 4 m',w:3,wl:'Viento fuerte',d:'Dos paños por lado, con la punta hacia el viento. La protección más firme.',shape:[[22,74],[90,28],[158,74]]},
+  {t:'Pared 4 m',w:1,wl:'Viento suave',d:'La pared más larga: cubre a toda la familia y da más privacidad.',shape:[[14,40],[52,40],[90,40],[128,40],[166,40]]},
+  {t:'Forma L 4 m',w:3,wl:'Viento fuerte',d:'Dos paños por lado, con la punta hacia el viento. La protección más firme.',shape:[[22,74],[56,51],[90,28],[124,51],[158,74]]},
   {t:'Privacidad',w:1,wl:'Rodea el espacio',d:'En U alrededor de la sombrilla, para un espacio cerrado y reservado.',shape:[[44,76],[44,34],[136,34],[136,76]]},
 ];
 function modeSvg(m){
