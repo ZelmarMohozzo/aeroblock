@@ -246,12 +246,15 @@ input[type=range]{width:100%;accent-color:var(--navy)}
 .incl li b{color:var(--navy)}
 
 /* Modos */
-.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-@media (max-width:900px){.modes{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.modes{grid-template-columns:1fr}}
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:900px){.modes{grid-template-columns:1fr}}
+.mode-col{display:grid;gap:14px;align-content:start;min-width:0}
+@media (max-width:900px) and (min-width:521px){.mode-col{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-col .mode-size{grid-column:1/-1}}
+.mode-size{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--navy);padding-bottom:10px;font-size:30px;color:var(--navy)}
+.mode-size span{font:500 12px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .mode{background:var(--white);border-radius:22px;padding:18px;display:grid;gap:10px;align-content:start}
 .mode svg{width:100%;height:auto;background:var(--paper);border-radius:14px}
-.mode h3{font-size:24px;color:var(--navy)}
+.mode h4{font:400 24px/1.05 var(--f-display);color:var(--navy);margin:0}
 .mode p{font-size:14.5px;color:var(--muted)}
 .wind{justify-self:start;font:600 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:7px 10px;border-radius:999px;display:inline-flex;gap:6px;align-items:center}
 .wind i{display:inline-flex;gap:2px}
@@ -647,12 +650,13 @@ document.getElementById('sizes').innerHTML=SIZES.map(z=>`
   </article>`).join('');
 
 const MODES=[
-  {t:'Pared 2 m',w:1,wl:'Viento suave',d:'Se coloca como una pared. Detiene el viento suave y da más privacidad.',shape:[[30,40],[90,40],[150,40]]},
-  {t:'Forma L',w:3,wl:'Viento fuerte',d:'Para viento fuerte y más privacidad. El palo del medio va en punta hacia el viento.',shape:[[40,62],[90,30],[140,62]]},
-  {t:'Cuña',w:2,wl:'Viento moderado',d:'Tres paños: el del medio de frente al viento y los laterales abiertos.',shape:[[38,66],[62,36],[118,36],[142,66]]},
-  {t:'Pared 4 m',w:1,wl:'Viento suave',d:'La pared más larga: cubre a toda la familia y da más privacidad.',shape:[[14,40],[52,40],[90,40],[128,40],[166,40]]},
-  {t:'Forma L 4 m',w:3,wl:'Viento fuerte',d:'Dos paños por lado, con la punta hacia el viento. La protección más firme.',shape:[[22,74],[56,51],[90,28],[124,51],[158,74]]},
-  {t:'Privacidad',w:1,wl:'Rodea el espacio',d:'En U alrededor de la sombrilla, para un espacio cerrado y reservado.',shape:[[44,76],[44,34],[136,34],[136,76]]},
+  {m:2,t:'Pared 2 m',w:1,wl:'Viento suave',d:'Se coloca como una pared. Detiene el viento suave y da más privacidad.',shape:[[30,40],[90,40],[150,40]]},
+  {m:2,t:'Forma L 2 m',w:3,wl:'Viento fuerte',d:'Para viento fuerte y más privacidad. El palo del medio va en punta hacia el viento.',shape:[[40,62],[90,30],[140,62]]},
+  {m:3,t:'Pared 3 m',w:1,wl:'Viento suave',d:'Tres paños en línea recta. Cubre a un grupo chico con su sombrilla y da más privacidad.',shape:[[22,40],[67,40],[112,40],[157,40]]},
+  {m:3,t:'Cuña 3 m',w:2,wl:'Viento moderado',d:'Tres paños: el del medio de frente al viento y los laterales abiertos.',shape:[[38,66],[62,36],[118,36],[142,66]]},
+  {m:3,t:'Privacidad 3 m',w:1,wl:'Rodea el espacio',d:'En U alrededor de la sombrilla, para un espacio cerrado y reservado.',shape:[[44,76],[44,34],[136,34],[136,76]]},
+  {m:4,t:'Pared 4 m',w:1,wl:'Viento suave',d:'La pared más larga: cubre a toda la familia y da más privacidad.',shape:[[14,40],[52,40],[90,40],[128,40],[166,40]]},
+  {m:4,t:'Forma L 4 m',w:3,wl:'Viento fuerte',d:'Dos paños por lado, con la punta hacia el viento. La protección más firme.',shape:[[22,74],[56,51],[90,28],[124,51],[158,74]]},
 ];
 function modeSvg(m){
   let arrows='';
@@ -661,10 +665,14 @@ function modeSvg(m){
   const dots=m.shape.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.6" fill="#B88C4E"/>`).join('');
   return `<svg viewBox="0 0 180 96" role="img" aria-label="Vista desde arriba: ${m.t}">${arrows}<circle cx="90" cy="70" r="13" fill="#FFFCF6" stroke="#18214A" stroke-opacity=".25"/><circle cx="90" cy="70" r="2" fill="#18214A"/><polyline points="${pts}" fill="none" stroke="#18214A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
 }
-document.getElementById('modes').innerHTML=MODES.map(m=>`
-  <article class="mode">${modeSvg(m)}
-    <span class="wind w${m.w}"><i aria-hidden="true">${[1,2,3].map(k=>`<b class="${k<=m.w?'on':''}"></b>`).join('')}</i>${m.wl}</span>
-    <h3>${m.t}</h3><p>${m.d}</p></article>`).join('');
+document.getElementById('modes').innerHTML=[2,3,4].map(n=>`
+  <div class="mode-col">
+    <h3 class="mode-size">${n} × 1 m <span>${n} paños · ${n+1} estacas</span></h3>
+    ${MODES.filter(m=>m.m===n).map(m=>`
+    <article class="mode">${modeSvg(m)}
+      <span class="wind w${m.w}"><i aria-hidden="true">${[1,2,3].map(k=>`<b class="${k<=m.w?'on':''}"></b>`).join('')}</i>${m.wl}</span>
+      <h4>${m.t}</h4><p>${m.d}</p></article>`).join('')}
+  </div>`).join('');
 
 const FABRICS=['Hojas azul','Rayas azul y crema','Rayas bordó','Líneas azul sobre crema','Círculos azul','Rayas gris','Líneas finas terracota','Rayas negro y blanco'];
 document.getElementById('fabrics').innerHTML=FABRICS.map((n,i)=>`<figure><img src="assets/sw${i+1}.jpg" alt="Tela ${n}" loading="lazy"><figcaption>${n}</figcaption></figure>`).join('');
